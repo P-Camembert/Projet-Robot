@@ -1,4 +1,4 @@
-# Projet-Robot
+# Projet-Robot-ev3
 Projet Robot, ev3 ECAM - Rennes
 
 Bonjour l'ami ! Dans ce document, tu retrouveras tous les codes que notre équipe a pu coder dans le cadre du projet de simulation numérique avec le robot EV3, pour l'ECAM - Rennes.
