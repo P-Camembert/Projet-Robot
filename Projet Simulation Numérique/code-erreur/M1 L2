@@ -1,0 +1,84 @@
+#!/usr/bin/env pybricks-micropython
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
+InfraredSensor, UltrasonicSensor, GyroSensor)
+from pybricks.parameters import Port, Stop, Direction, Button, Color
+from pybricks.tools import wait, StopWatch, DataLog
+from pybricks.robotics import DriveBase
+from pybricks.media.ev3dev import SoundFile, ImageFile
+
+
+ev3 = EV3Brick()
+# Initialize the motors.
+left_motor = Motor(Port.C)
+right_motor = Motor(Port.B)
+sensor = ColorSensor(Port.S4)
+obstacle_sensor = InfraredSensor(Port.S2)
+# Initialize the drive base.
+robot = DriveBase(left_motor, right_motor, wheel_diameter = 56, axle_track=64)
+# toutes les distances sont en mm
+robot.settings(2200, 500) # speed and acceleration
+#ev3.speaker.beep() # émet un son pour s'assurer qu'il fonctionne
+DRIVE_SPEED = 300
+compteur = 0
+
+while True:
+    
+    # Lit la couleur détectée par le capteur et la valeur renvoyée par le capteur infrarouge
+    color = sensor.color()
+    obstacle = obstacle_sensor.distance()
+    
+    if obstacle < 10 :
+
+        robot.stop()
+        ev3.speaker.beep()
+        wait(1000)
+
+    else :
+        if color == Color.BLACK :
+
+            # Teste si la couleur détectée est noire
+            right_motor.run(DRIVE_SPEED) # On tourne à Gauche
+            left_motor.stop()
+
+        elif color == Color.RED :
+            # Test si la couleur détectée est orange
+
+            robot.stop()            # On arrête le robot
+            robot.straight(55)      # On fait avancer le robot de 55mm
+            robot.stop()            # On arrête le robot
+            wait(1000)              # On attends 1 seconde
+            robot.turn(120)         # On tourne à 75 degrés vers la droite
+            robot.stop()            # On arrête le robot
+            wait(1000)              # On attends 1 seconde
+            robot.straight(25)      # On fait avancer le robot de 25mm
+            robot.stop()            # On arrête le robot
+
+            if color == Color.BLACK :
+
+                # Teste si la couleur détectée est noire
+                right_motor.run(DRIVE_SPEED) # On tourne à Gauche
+                left_motor.stop()
+            
+            elif color == Color.RED :
+                # Test si la couleur détectée est orange
+
+                robot.stop()            # On arrête le robot
+                robot.straight(55)      # On fait avancer le robot de 55mm
+                robot.stop()            # On arrête le robot
+                wait(1000)              # On attends 1 seconde
+                robot.turn(-120)         # On tourne à 75 degrés vers la gauche
+                robot.stop()            # On arrête le robot
+                wait(1000)              # On attends 1 seconde
+                robot.straight(25)      # On fait avancer le robot de 25mm
+                robot.stop()            # On arrête le robot
+
+            else:
+
+                left_motor.run(DRIVE_SPEED) # On tourne à droite
+                right_motor.stop()
+
+        else:
+
+            left_motor.run(DRIVE_SPEED) # On tourne à droite
+            right_motor.stop()
